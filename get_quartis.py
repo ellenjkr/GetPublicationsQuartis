@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.utils.dataframe import dataframe_to_rows
+from values import API_KEY
 
 class Quartis():
 	def __init__(self, file_name, api_key):
@@ -23,7 +24,7 @@ class Quartis():
 		log = ''
 		link_scopus = ''
 		try:
-			insttoken = os.environ.get('INSTTOKEN')
+			insttoken = os.environ.get('INSTTOKEN') # The insttoken is being hold as an environment variable
 			headers = {'X-ELS-Insttoken': insttoken, 'X-ELS-APIKey': self.api_key}
 			uri = "https://api.elsevier.com/content/serial/title?issn=" + issn + "&view=citescore"
 			response = requests.get(uri, headers=headers)
@@ -219,7 +220,7 @@ if __name__ == '__main__':
 	relatorios = {'Autor':[], 'Relatorio':[]}
 
 	for file in os.listdir("Autores"):
-		quartis = Quartis(f"Autores/{file}", '2f8a856ea2c32c265b4c5a9895e6900d')
+		quartis = Quartis(f"Autores/{file}", API_KEY')
 		relatorio = quartis.get_quartis()
 		relatorios['Relatorio'].append(pd.DataFrame(relatorio))
 		relatorios['Autor'].append(file.split(".")[0])
